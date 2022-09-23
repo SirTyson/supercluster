@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using k8s;
 using k8s.Models;
-using Microsoft.Rest.Serialization;
+using Newtonsoft.Json;
 
 namespace CSLibrary
 {
@@ -60,7 +60,7 @@ namespace CSLibrary
                await stdinWriter.WriteAsync(shellCmdStrIncludingNewLine).ConfigureAwait(false);
                await stdinWriter.FlushAsync().ConfigureAwait(false);
                var errors = await errorReader.ReadToEndAsync().ConfigureAwait(false);
-               return Kubernetes.GetExitCodeOrThrow(SafeJsonConvert.DeserializeObject<V1Status>(errors));
+               return Kubernetes.GetExitCodeOrThrow(JsonConvert.DeserializeObject<V1Status>(errors));
             }
         }
     }
