@@ -844,6 +844,7 @@ type NetworkCfg with
             let ingressPath = V1HTTPIngressPath()
             ingressPath.Backend <- coreBackend pn
             ingressPath.Path <- sprintf "/%s/core/" pn.StringName
+            ingressPath.PathType <- "Prefix"
             ingressPath
 
         let historyPath (coreSet: CoreSet) (i: int) : V1HTTPIngressPath =
@@ -851,7 +852,25 @@ type NetworkCfg with
             let ingressPath = V1HTTPIngressPath()
             ingressPath.Backend <- historyBackend pn
             ingressPath.Path <- sprintf "/%s/history/" pn.StringName
+            ingressPath.PathType <- "Prefix"
             ingressPath
+
+       
+        // let corePath (coreSet: CoreSet) (i: int) : V1HTTPIngressPath =
+        //     let pn = self.PodName coreSet i
+        //     let ingressPath = V1HTTPIngressPath()
+        //     ingressPath.Backend <- coreBackend pn
+        //     ingressPath.Path <- sprintf "/%s/core(/|$)(.*)" pn.StringName
+        //     ingressPath.PathType <- "Prefix"
+        //     ingressPath
+
+        // let historyPath (coreSet: CoreSet) (i: int) : V1HTTPIngressPath =
+        //     let pn = self.PodName coreSet i
+        //     let ingressPath = V1HTTPIngressPath()
+        //     ingressPath.Backend <- historyBackend pn
+        //     ingressPath.Path <- sprintf "/%s/history(/|$)(.*)" pn.StringName
+        //     ingressPath.PathType <- "Prefix"
+        //     ingressPath
 
         let corePaths = self.MapAllPeers corePath
         let historyPaths = self.MapAllPeers historyPath
@@ -863,9 +882,19 @@ type NetworkCfg with
         let rules = [| V1IngressRule(host = host, http = rule) |]
         let spec = V1IngressSpec(rules = rules)
 
+        // let annotation =
+        //     Map.ofArray [| ("traefik.ingress.kubernetes.io/rule-type", "PathPrefixStrip")
+        //                    ("kubernetes.io/ingress.class", self.missionContext.ingressClass) |]
+
+        // let annotation =
+        //     Map.ofArray [| ("ingress.kubernetes.io/ssl-redirect", "false")
+        //                    ("nginx.ingress.kubernetes.io/force-ssl-redirect", "false")
+        //                    ("nginx.ingress.kubernetes.io/rewrite-target", "/$2")
+        //                    ("kubernetes.io/ingress.class", self.missionContext.ingressClass) |]
+
+
         let annotation =
-            Map.ofArray [| ("traefik.ingress.kubernetes.io/rule-type", "PathPrefixStrip")
-                           ("kubernetes.io/ingress.class", self.missionContext.ingressClass) |]
+            Map.ofArray [| ("kubernetes.io/ingress.class", self.missionContext.ingressClass) |]
 
         let meta =
             V1ObjectMeta(name = self.IngressName, namespaceProperty = self.NamespaceProperty, annotations = annotation)
