@@ -77,7 +77,7 @@ let upgradeSorobanTxLimits (context: MissionContext) (formation: StellarFormatio
 
 // Multiplier to use when increasing ledger limits. Expected
 // ledger close time (5 seconds) multiplied by some factor to add headroom (2x)
-let private limitMultiplier = 5 * 2
+let private limitMultiplier = 10 * 2
 
 let private smallNetworkSize = 10
 
@@ -143,7 +143,7 @@ let maxTPSTest (context: MissionContext) (baseLoadGen: LoadGen) (setupCfg: LoadG
         false
         (fun (formation: StellarFormation) ->
 
-            let numAccounts = 30000
+            let numAccounts = 60000
 
             let upgradeMaxTxSetSize (coreSets: CoreSet list) (rate: int) =
                 // Max tx size to avoid overflowing the transaction queue

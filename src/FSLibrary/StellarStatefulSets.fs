@@ -316,7 +316,7 @@ type StellarFormation with
 
         for (i, peer) in (List.indexed loadGenPeers) do
             let loadGen = fractionalLoadGen i
-            let offset = loadGen.accounts * i
+            let offset = (loadGen.accounts * i) + 1
             let peerSpecificLoadgen = { loadGen with offset = offset }
             LogInfo "Loadgen: %s with offset %d" (peer.GenerateLoad peerSpecificLoadgen) offset
 

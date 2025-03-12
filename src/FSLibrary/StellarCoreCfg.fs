@@ -323,6 +323,12 @@ type StellarCoreCfg =
         t.Add("INVARIANT_CHECKS", invList) |> ignore
         t.Add("UNSAFE_QUORUM", self.unsafeQuorum) |> ignore
         t.Add("FAILURE_SAFETY", self.failureSafety) |> ignore
+        t.Add("EXPERIMENTAL_PARALLEL_LEDGER_APPLY", true) |> ignore
+
+        // Increase batch size
+        t.Add("TX_BATCH_MAX_SIZE", 500) |> ignore
+        // 1s to pull a tx
+        t.Add("FLOOD_DEMAND_BACKOFF_DELAY_MS", 1000) |> ignore
 
         match self.surveyPhaseDuration with
         | None -> ()
