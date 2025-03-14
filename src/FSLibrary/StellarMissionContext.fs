@@ -103,6 +103,7 @@ type MissionContext =
       pubnetParallelCatchupStartingLedger: int
       pubnetParallelCatchupEndLedger: int option
       pubnetParallelCatchupNumWorkers: int
+      txBatchMaxSize: int option
 
       // Tail logging can cause the pubnet simulation missions like SorobanLoadGeneration
       // and SimulatePubnet to fail on the heartbeat handler due to what looks like a

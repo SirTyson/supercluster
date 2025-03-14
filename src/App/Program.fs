@@ -110,7 +110,8 @@ type MissionOptions
         pubnetParallelCatchupNumWorkers: int,
         tag: string option,
         numRuns: int option,
-        catchupSkipKnownResultsForTesting: bool option
+        catchupSkipKnownResultsForTesting: bool option,
+        txBatchMaxSize: int option
     ) =
 
     [<Option('k', "kubeconfig", HelpText = "Kubernetes config file", Required = false, Default = "~/.kube/config")>]
@@ -463,6 +464,11 @@ type MissionOptions
              HelpText = "when this flag is provided, pubnet parallel catchup workers will run with CATCHUP_SKIP_KNOWN_RESULTS_FOR_TESTING = true, resulting in skipping application of failed transaction and signature verification",
              Required = false)>]
     member self.CatchupSkipKnownResultsForTesting = catchupSkipKnownResultsForTesting
+    
+    [<Option("tx-batch-max-size",
+             HelpText = "Maximum size of transaction batches for parallel processing",
+             Required = false)>]
+    member self.TxBatchMaxSize = txBatchMaxSize
 
 let splitLabel (lab: string) : (string * string option) =
     match lab.Split ':' with
@@ -579,7 +585,8 @@ let main argv =
                   numRuns = None
                   enableTailLogging = true
                   catchupSkipKnownResultsForTesting = None
-                  updateSorobanCosts = None }
+                  updateSorobanCosts = None
+                  txBatchMaxSize = None }
 
             let nCfg = MakeNetworkCfg ctx [] None
             use formation = kube.MakeEmptyFormation nCfg
@@ -717,7 +724,8 @@ let main argv =
                                numRuns = mission.NumRuns
                                enableTailLogging = true
                                catchupSkipKnownResultsForTesting = mission.CatchupSkipKnownResultsForTesting
-                               updateSorobanCosts = None }
+                               updateSorobanCosts = None 
+                               txBatchMaxSize = mission.TxBatchMaxSize }
 
                          allMissions.[m] missionContext
 
