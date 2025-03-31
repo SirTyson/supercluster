@@ -324,12 +324,15 @@ type StellarCoreCfg =
         t.Add("UNSAFE_QUORUM", self.unsafeQuorum) |> ignore
         t.Add("FAILURE_SAFETY", self.failureSafety) |> ignore
         t.Add("EXPERIMENTAL_PARALLEL_LEDGER_APPLY", true) |> ignore
+        t.Add("TX_BATCH_MAX_SIZE", 500) |> ignore
+        t.Add("BUCKETLIST_DB_INDEX_PAGE_SIZE_EXPONENT", 0) |> ignore
+        t.Add("BUCKETLIST_DB_PERSIST_INDEX", false) |> ignore
 
         // Only add TX_BATCH_MAX_SIZE to config if explicitly set in command line
         match self.network.missionContext.txBatchMaxSize with
         | Some batchSize -> t.Add("TX_BATCH_MAX_SIZE", batchSize) |> ignore
         | None -> ()
-        
+
         // 1s to pull a tx
         t.Add("FLOOD_DEMAND_BACKOFF_DELAY_MS", 1000) |> ignore
 
