@@ -259,6 +259,7 @@ type StellarCoreCfg =
         t.Add("AUTOMATIC_MAINTENANCE_COUNT", self.automaticMaintenanceCount) |> ignore
         t.Add("ARTIFICIALLY_ACCELERATE_TIME_FOR_TESTING", self.accelerateTime) |> ignore
         t.Add("ARTIFICIALLY_GENERATE_LOAD_FOR_TESTING", self.generateLoad) |> ignore
+        t.Add("FLOOD_DEMAND_PERIOD_MS", 100) |> ignore
 
         if self.updateSorobanCosts.IsSome then
             t.Add("UPDATE_SOROBAN_COSTS_DURING_PROTOCOL_UPGRADE_FOR_TESTING", self.updateSorobanCosts.Value)
