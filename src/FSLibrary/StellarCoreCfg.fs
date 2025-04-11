@@ -339,7 +339,10 @@ type StellarCoreCfg =
         // 1s to pull a tx
         t.Add("FLOOD_DEMAND_BACKOFF_DELAY_MS", 1000) |> ignore
         t.Add("BUCKETLIST_DB_INDEX_PAGE_SIZE_EXPONENT", 0) |> ignore
+
+        // t.Add("BUCKETLIST_DB_INDEX_CUTOFF", 0) |> ignore
         t.Add("BUCKETLIST_DB_PERSIST_INDEX", false) |> ignore
+        t.Add("EXPERIMENTAL_BACKGROUND_TX_SIG_VERIFICATION", true) |> ignore
 
         match self.surveyPhaseDuration with
         | None -> ()
