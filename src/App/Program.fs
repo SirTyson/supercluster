@@ -93,9 +93,6 @@ type MissionOptions
         flatNetworkDelay: int option,
         peerReadingCapacity: int option,
         enableBackgroundOverlay: bool,
-        enableBackgroundSigValidation: bool,
-        enableParallelApply: bool,
-        enableInMemoryBuckets: bool,
         peerFloodCapacity: int option,
         peerFloodCapacityBytes: int option,
         flowControlSendMoreBatchSizeBytes: int option,
@@ -387,21 +384,6 @@ type MissionOptions
     [<Option("enable-background-overlay", HelpText = "background overlay")>]
     member self.EnableBackgroundOverlay : bool = enableBackgroundOverlay
 
-    [<Option("enable-background-sig-validation", HelpText = "enable background signature validation")>]
-    member self.EnableBackgroundSigValidation : bool = enableBackgroundSigValidation
-
-    [<Option("enable-parallel-apply",
-             HelpText = "Enable EXPERIMENTAL_PARALLEL_LEDGER_APPLY configuration",
-             Required = false,
-             Default = false)>]
-    member self.EnableParallelApply : bool = enableParallelApply
-
-    [<Option("in-memory-buckets",
-             HelpText = "Enable in-memory buckets by setting BUCKETLIST_DB_INDEX_PAGE_SIZE_EXPONENT=0",
-             Required = false,
-             Default = false)>]
-    member self.EnableInMemoryBuckets : bool = enableInMemoryBuckets
-
     [<Option("peer-flood-capacity",
              HelpText = "A config parameter that controls how many flood messages (tx or SCP) from a particular peer core can process simultaneously (See PEER_FLOOD_READING_CAPACITY)",
              Required = false)>]
@@ -612,9 +594,6 @@ let main argv =
                   peerFloodCapacity = None
                   peerReadingCapacity = None
                   enableBackggroundOverlay = false
-                  enableBackgroundSigValidation = false
-                  enableParallelApply = false
-                  enableInMemoryBuckets = false
                   peerFloodCapacityBytes = None
                   outboundByteLimit = None
                   sleepMainThread = None
@@ -757,9 +736,6 @@ let main argv =
                                simulateApplyWeight = processInputSeq mission.SimulateApplyWeight
                                peerReadingCapacity = mission.PeerReadingCapacity
                                enableBackggroundOverlay = mission.EnableBackgroundOverlay
-                               enableBackgroundSigValidation = mission.EnableBackgroundSigValidation
-                               enableParallelApply = mission.EnableParallelApply
-                               enableInMemoryBuckets = mission.EnableInMemoryBuckets
                                peerFloodCapacity = mission.PeerFloodCapacity
                                peerFloodCapacityBytes = mission.PeerFloodCapacityBytes
                                outboundByteLimit = mission.OutboundByteLimit
