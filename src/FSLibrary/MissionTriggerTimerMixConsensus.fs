@@ -137,12 +137,14 @@ let triggerTimerMixConsensus (baseContext: MissionContext) =
                     flagEnabled
                     nodeOffsets
 
+                let hasNonZeroOffset = List.exists (fun o -> o <> 0) nodeOffsets
+
                 let modified =
                     { cs with
                           options =
                               { cs.options with
-                                    experimentalTriggerTimer = Some flagEnabled
-                                    clockOffsets = Some nodeOffsets } }
+                                    experimentalTriggerTimer = if flagEnabled then Some true else None
+                                    clockOffsets = if hasNonZeroOffset then Some nodeOffsets else None } }
 
                 modified, (newFlagRemaining, offIdx + nc))
             (numFlagEnabled, 0)

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-IMAGE=docker-registry.services.stellar-ops.com/dev/stellar-core:25.1.2-3048.589044435.noble-perftests
+IMAGE=docker-registry.services.stellar-ops.com/dev/stellar-core:25.1.2-3047.7a0d9bcd2.jammy-do-not-use-in-prd-perftests
 
-PROJECT="/home/user/src/supercluster/src/App/App.fsproj"
+PROJECT="/mnt/xvdf/supercluster/src/App/App.fsproj"
 
 # -- Drift distribution (uncomment one) --
 # No drift:
@@ -23,6 +23,6 @@ dotnet run --project $PROJECT clean --namespace=garand  && dotnet run --project 
   --avoid-node-labels=purpose:ssc \
   --namespace=garand \
   --export-to-prometheus \
-  --pubnet-data=/home/user/src/stellar-supercluster/data/topologies/generated-overlay-topology-0.json \
+  --pubnet-data=/mnt/xvdf/supercluster/topologies/theoretical-max-tps.json \
   --trigger-timer-flag-pct 100 \
   $DRIFT_ARGS
