@@ -30,6 +30,29 @@ type ClockDriftDistribution =
     | UniformDrift of lower: int * upper: int
     | BimodalDrift of min1: int * max1: int * min2: int * max2: int
 
+// Round ms to whole seconds, ceiling away from zero: 1500 -> 2, -800 -> -1
+let private ceilToSec (ms: int) =
+    if ms >= 0 then (ms + 999) / 1000
+    else -((abs ms + 999) / 1000)
+
+// Drift suffix for a single offset: 0 -> "", 1500 -> "-p2", -800 -> "-m1"
+let private driftSuffix (ms: int) =
+    let s = ceilToSec ms
+    if s > 0 then sprintf "-p%d" s
+    elif s < 0 then sprintf "-m%d" (abs s)
+    else ""
+
+// Build an annotated CoreSet name: append "-expr" if flag enabled, drift suffix for single-node sets
+let private annotateName (baseName: string) (flagEnabled: bool) (nodeOffsets: int list) =
+    let flagPart = if flagEnabled then "-expr" else ""
+
+    let driftPart =
+        match nodeOffsets with
+        | [ single ] -> driftSuffix single
+        | _ -> "" // Multi-node: drift varies per node, skip in name
+
+    CoreSetName(baseName + flagPart + driftPart)
+
 let private parseDrift (context: MissionContext) : ClockDriftDistribution =
     match context.uniformDrift, context.bimodalDrift with
     | [], [] -> NoDrift
@@ -139,8 +162,11 @@ let triggerTimerMixConsensus (baseContext: MissionContext) =
 
                 let hasNonZeroOffset = List.exists (fun o -> o <> 0) nodeOffsets
 
+                let annotatedName = annotateName cs.name.StringName flagEnabled nodeOffsets
+
                 let modified =
                     { cs with
+                          name = annotatedName
                           options =
                               { cs.options with
                                     experimentalTriggerTimer = if flagEnabled then Some true else None
